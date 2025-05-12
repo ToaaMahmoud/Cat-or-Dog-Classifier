@@ -13,7 +13,7 @@ dog_files = os.listdir(dog_dir)
 
 
 #resized folder
-resized_dir = "./data/ALL/Resized"
+resized_dir = "./data/Resized"
 
 #min_data path
 min_TXT="./../data/Training_Data/min_data.txt"
@@ -23,9 +23,6 @@ max_data="./../data/Training_Data/max_data.csv"
 
 # get number of images in folder
 def count_files(folder_path):
-    # Ensure the folder exists
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
     # List all files in the folder
     files = os.listdir(folder_path)
     # Count the number of files
@@ -66,6 +63,6 @@ def resize(cat_dir,dog_dir,destination, dim=(300, 300)):
 
 
 
-resize(cat_dir, dog_dir,"./data/All/Resized")
+resize(cat_dir, dog_dir,"./data/Resized")
 
 

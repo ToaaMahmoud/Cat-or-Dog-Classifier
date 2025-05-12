@@ -165,14 +165,22 @@ def catVSdog(isCat):
 
 # set image to label or screen
 def setImage():
-    global image
+    global image, img_path
     res_label.configure(text="")
     path = tkFileDialog.askopenfilename(filetypes=[("Image Files", ".jpg .png .gif")])
+    # Check if a file was selected
+    if path=="":
+        print("No file selected. Resetting to default image.")
+        label.configure(image=defaultImg)  # Reset to default image
+        img_path = "" # Reset img_path
+        return None  # Exit the function if no file is selected
+
     my_image = customTk.CTkImage(
         light_image=Image.open(path),
         size=imgSz,
     )
     label.configure(image=my_image)
+    img_path = path
     return path
 
 
@@ -188,7 +196,8 @@ def center_btn(btn):
 def setImageButton():
     global img_path
     img_path = setImage()
-    print("image set is done")
+    if img_path:
+        print("image set is done")
 
 
 # create the button
@@ -238,16 +247,21 @@ trainBtn = customTk.CTkButton(
 trainBtn.place(relx=(0.5 - center_btn(setImageBtn)), y=bt_y + 60)
 
 
-# identify button
-
-
-# identify button function
 def identifyingButton():
-    if (img_path != "") and (train_done == True):
-        # print(img_path)
-        catVSdog(neural(img_path))
+    if img_path == "" or img_path is None:
+        writeText(res_label, "Please upload an image first", 30, "red")
+        return
+
+    if not train_done:
+        writeText(res_label, "Please train the model first", 30, "red")
+        return
+   
+    # Run the neural network and display the result
+    result = neural(img_path)
+    if result is not None:
+        catVSdog(result)
     else:
-        writeText(res_label, "set image and train first", 30, "red")
+        writeText(res_label, "Error identifying the image", 30, "red")
 
 
 # create the button
@@ -332,7 +346,22 @@ def sto_draw(root, cost):
     toolbar.pack(fill="x")
 
 
-# adaline function
+def on_close():
+    print("Application is closing...")
+    # Cancel all pending Tkinter callbacks
+    try:
+        app.after_cancel(app.after_id)  # Cancel any pending callbacks if stored
+    except AttributeError:
+        pass  # Ignore if no callbacks are pending
+
+    # Close all matplotlib figures
+    plt.close('all')
+    # Destroy the application window
+    app.quit()  # Stop the Tkinter main loop
+    app.destroy()  # Destroy the window
+
+# Bind the close event
+app.protocol("WM_DELETE_WINDOW", on_close)
 
 
 # window main loop

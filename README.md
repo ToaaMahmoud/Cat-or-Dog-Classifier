@@ -29,7 +29,7 @@ To run this project, ensure you have the following installed:
 
 ##  Steps in the GUI
 - Click "Upload Your Image" to select an image.
-- Click "Train" to train the model (if not already trained).
+- Click "Train" to train the model — it only takes a few seconds.
 - Click "Identify" to classify the uploaded image.
 - Finally, enjoy the sound of a cat or a dog! 😊
 
